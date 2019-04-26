@@ -1,3 +1,5 @@
-module github.com/xakep666/mongo-migrate
+module LightningPeach/mongo-migrate
 
-require github.com/globalsign/mgo v0.0.0-20180615134936-113d3961e731
+go 1.12
+
+require gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
