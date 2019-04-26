@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/globalsign/mgo"
+	"gopkg.in/mgo.v2"
 )
 
 var globalMigrate = NewMigrate(nil)

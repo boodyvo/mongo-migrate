@@ -4,7 +4,7 @@ package migrate
 import (
 	"time"
 
-	"github.com/globalsign/mgo"
+	"gopkg.in/mgo.v2"
 )
 
 type versionRecord struct {

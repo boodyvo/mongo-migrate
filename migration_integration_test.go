@@ -4,13 +4,14 @@ package migrate
 
 import (
 	"errors"
+	"fmt"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 	"net/url"
 	"os"
 	"strings"
 	"testing"
-
-	"github.com/globalsign/mgo"
-	"github.com/globalsign/mgo/bson"
+	"time"
 )
 
 const testCollection = "test"
@@ -21,7 +22,8 @@ func cleanup(db *mgo.Database) {
 		panic(err)
 	}
 	for _, collection := range collections {
-		db.C(collection).DropAllIndexes()
+		//db.Run(bson.D{{"dropIndexes", collection}, {"index", "*"}}, nil)
+		db.C(collection).DropIndexName("")
 		db.C(collection).DropCollection()
 	}
 }
@@ -154,8 +156,15 @@ func TestDownMigrations(t *testing.T) {
 			return db.C(testCollection).Remove(bson.M{"hello": "world"})
 		}},
 		Migration{Version: 2, Description: "world", Up: func(db *mgo.Database) error {
-			return db.C(testCollection).EnsureIndex(mgo.Index{Name: "test_idx", Key: []string{"hello"}})
+			err := db.C(testCollection).EnsureIndex(mgo.Index{
+				Name: "test_idx",
+				Key: []string{"hello"},
+			})
+			fmt.Printf("error while index: %v\n", err)
+			return err
 		}, Down: func(db *mgo.Database) error {
+			idxs, _ := db.C(testCollection).Indexes()
+			fmt.Printf("indexes: %v\n", idxs)
 			return db.C(testCollection).DropIndexName("test_idx")
 		}},
 	)
