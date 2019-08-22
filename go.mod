@@ -1,4 +1,4 @@
-module LightningPeach/mongo-migrate
+module github.com/LightningPeach/mongo-migrate
 
 go 1.12
 
